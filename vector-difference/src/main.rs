@@ -28,6 +28,9 @@ mod test {
     fn test_vector_difference() {
         let vec1 = vec![1, 2, 5, 8];
         let vec2 = vec![5, 8, 5, 11];
-        assert_eq!(vector_difference(&vec1, &vec2), vec![1, 2])
+        assert_eq!(vector_difference(&vec1, &vec2), vec![1, 2]);
+        let vec1 = vec!["ab", "ac"];
+        let vec2 = vec!["ac", "df"];
+        assert_eq!(vector_difference(&vec1, &vec2), vec!["ab"])
     }
 }
