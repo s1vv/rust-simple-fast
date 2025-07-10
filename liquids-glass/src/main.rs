@@ -2,65 +2,49 @@ use std::collections::HashMap;
 
 fn separate_liquids(glass: &[Vec<char>]) -> Vec<Vec<char>> {
     if glass.is_empty() {
-        Vec::new()
-    } else {
-        let weight = HashMap::from([('H', 1.36), ('W', 1.00), ('A', 0.87), ('O', 0.8)]);
-        let mut glass_sorted = glass.to_vec();
-        if glass.len() == 1 {
-            glass_sorted[0].sort_by(|k1, k2| {
-                let l1 = weight.get(k1).unwrap_or(&0.0);
-                let l2 = weight.get(k2).unwrap_or(&0.0);
-                l1.partial_cmp(l2).unwrap()
-            });
-        }
-
-        let glass_width = glass[0].len();
-
-        let mut liquids_count: HashMap<char, u32> = HashMap::new();
-
-        // только читаем, не меняем glass
-        for v in glass.iter() {
-            for c in v.iter() {
-                *liquids_count.entry(*c).or_insert(0) += 1;
-            }
-        }
-
-        let mut liquids_count = liquids_count.into_iter().collect::<Vec<_>>();
-        liquids_count.sort_by(|(k1, _), (k2, _)| {
-            let l1 = weight.get(k1).unwrap_or(&0.0);
-            let l2 = weight.get(k2).unwrap_or(&0.0);
-            l1.partial_cmp(l2).unwrap()
-        });
-
-        let error = 'E';
-
-        // теперь второй цикл - уже можем мутировать glass
-        let mut index: usize = 0;
-        for (ch, count) in liquids_count {
-            for _ in 0..count as usize / glass_width {
-                glass_sorted[index] = match ch {
-                    'H' => vec!['H'; glass_width],
-                    'O' => vec!['O'; glass_width],
-                    'A' => vec!['A'; glass_width],
-                    'W' => vec!['W'; glass_width],
-                    _ => vec![error; glass_width],
-                };
-                index += 1;
-            }
-        }
-
-        glass_sorted
+        return Vec::new();
     }
+
+    let weight = HashMap::from([('H', 1.36), ('W', 1.00), ('A', 0.87), ('O', 0.8)]);
+
+    let glass_width = glass[0].len();
+    let mut glass_liquids = Vec::with_capacity(glass_width * glass.len());
+    glass_liquids = glass.iter().flat_map(|c| c).collect();
+    glass_liquids.sort_by(|c1, c2| {
+        let w1 = weight.get(c1).unwrap_or(&0.0);
+        let w2 = weight.get(c2).unwrap_or(&0.0);
+        w1.partial_cmp(w2).unwrap()
+    });
+
+    let mut sorted_glass: Vec<Vec<char>> = Vec::with_capacity(glass.len());
+    let mut index_char: usize = 0;
+    for _ in 0..sorted_glass.capacity() {
+        let mut layer = Vec::with_capacity(glass_width);
+        for _ in 0..glass_width {
+            layer.push(*glass_liquids[index_char]);
+            index_char += 1;
+        }
+        sorted_glass.push(layer);
+    }
+    println!("{sorted_glass:?}");
+
+    sorted_glass
 }
 
 ///
 fn main() {
-    let mut glass2 = vec![vec!['A', 'H', 'W', 'O']];
-    dbg!(separate_liquids(&mut glass2));
+    let mut glass1 = vec![
+        vec!['H', 'H', 'W', 'O'],
+        vec!['W', 'W', 'O', 'W'],
+        vec!['H', 'H', 'O', 'O'],
+    ];
+    dbg!(separate_liquids(&mut glass1));
 }
 
 #[cfg(test)]
 mod tests {
+    use std::vec;
+
     use super::*;
 
     const ERR_MSG: &str = "\nYour result (left) did not match the expected output (right)";
@@ -107,5 +91,23 @@ mod tests {
             &[vec!['O'], vec!['A'], vec!['W'], vec!['H']],
         );
         dotest(&[], &[]);
+        dotest(
+            &[
+                vec!['A', 'O', 'W', 'W', 'W', 'A', 'O'],
+                vec!['H', 'O', 'H', 'H', 'A', 'A', 'W'],
+                vec!['A', 'A', 'W', 'O', 'H', 'A', 'W'],
+                vec!['H', 'H', 'A', 'W', 'O', 'W', 'H'],
+                vec!['H', 'O', 'H', 'A', 'A', 'O', 'O'],
+                vec!['W', 'W', 'H', 'W', 'A', 'A', 'A'],
+            ],
+            &[
+                vec!['O', 'O', 'O', 'O', 'O', 'O', 'O'],
+                vec!['O', 'A', 'A', 'A', 'A', 'A', 'A'],
+                vec!['A', 'A', 'A', 'A', 'A', 'A', 'A'],
+                vec!['W', 'W', 'W', 'W', 'W', 'W', 'W'],
+                vec!['W', 'W', 'W', 'W', 'H', 'H', 'H'],
+                vec!['H', 'H', 'H', 'H', 'H', 'H', 'H'],
+            ],
+        );
     }
 }
