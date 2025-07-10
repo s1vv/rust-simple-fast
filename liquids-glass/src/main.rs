@@ -6,29 +6,20 @@ fn separate_liquids(glass: &[Vec<char>]) -> Vec<Vec<char>> {
     }
 
     let weight = HashMap::from([('H', 1.36), ('W', 1.00), ('A', 0.87), ('O', 0.8)]);
-
     let glass_width = glass[0].len();
-    let mut glass_liquids = Vec::with_capacity(glass_width * glass.len());
-    glass_liquids = glass.iter().flat_map(|c| c).collect();
-    glass_liquids.sort_by(|c1, c2| {
+
+    let mut liquids: Vec<char> = glass.iter().flat_map(|row| row.iter().copied()).collect();
+
+    liquids.sort_by(|c1, c2| {
         let w1 = weight.get(c1).unwrap_or(&0.0);
         let w2 = weight.get(c2).unwrap_or(&0.0);
         w1.partial_cmp(w2).unwrap()
     });
 
-    let mut sorted_glass: Vec<Vec<char>> = Vec::with_capacity(glass.len());
-    let mut index_char: usize = 0;
-    for _ in 0..sorted_glass.capacity() {
-        let mut layer = Vec::with_capacity(glass_width);
-        for _ in 0..glass_width {
-            layer.push(*glass_liquids[index_char]);
-            index_char += 1;
-        }
-        sorted_glass.push(layer);
-    }
-    println!("{sorted_glass:?}");
-
-    sorted_glass
+    liquids
+        .chunks(glass_width)
+        .map(|chunk| chunk.to_vec())
+        .collect()
 }
 
 ///
