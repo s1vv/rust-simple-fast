@@ -1,1 +1,35 @@
 */target
+# 👉 Игнорируем стандартное для Python
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+*.sqlite3
+
+# virtual envs
+venv/
+.env/
+.venv/
+
+# IDE файлы
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS и др.
+.DS_Store
+
+# 👉 Игнорируем ВСЕ скрытые файлы и папки
+.*
+# кроме самого .gitignore
+!.gitignore
+
+# 👉 Если у тебя есть скрытые системные директории, которые ты НЕ хочешь игнорировать, добавь исключения:
+# !.github/
+# !.some-config/
