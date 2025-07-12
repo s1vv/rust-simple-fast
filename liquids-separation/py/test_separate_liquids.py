@@ -1,5 +1,5 @@
 # type: ignore
-from main import separate_liquids_numpy
+from main import separate_liquids_numpy, separate_liquids_native
 import numpy as np
 
 
@@ -14,6 +14,11 @@ def generate_big_glass(n_rows=100_000, width=10):
 def test_benchmark_large_glass(benchmark):
     glass = generate_big_glass(100_000, 10)
     benchmark(lambda: separate_liquids_numpy(glass))
+
+
+def test_benchmark_large_glass_native(benchmark):
+    glass = generate_big_glass(100_000, 10)
+    benchmark(lambda: separate_liquids_native(glass))
 
 
 def test_simple_case():

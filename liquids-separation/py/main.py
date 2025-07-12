@@ -39,5 +39,22 @@ def separate_liquids_numpy(glass):
     return sorted_symbols.reshape(-1, glass_width).tolist()
 
 
+def separate_liquids_native(glass):
+    if not glass:
+        return []
+
+    weight = {"H": 1.36, "W": 1.00, "A": 0.87, "O": 0.8}
+    glass_width = len(glass[0])
+
+    # "Сплющиваем"
+    liquids = [c for row in glass for c in row]
+
+    # Сортируем по весу
+    liquids.sort(key=lambda c: weight.get(c, 0.0))
+
+    # Нарезаем обратно на слои
+    return [liquids[i : i + glass_width] for i in range(0, len(liquids), glass_width)]
+
+
 if __name__ == "__main__":
     main()

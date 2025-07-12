@@ -1,5 +1,5 @@
-use criterion::{Criterion, criterion_group, criterion_main};
-use liquids_glass::separate_liquids;
+use criterion::{criterion_group, criterion_main, Criterion};
+use liquids_separation::separate_liquids;
 use rand::seq::IndexedMutRandom;
 
 fn generate_big_glass(n_rows: usize, width: usize) -> Vec<Vec<char>> {

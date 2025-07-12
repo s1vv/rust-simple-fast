@@ -1,4 +1,4 @@
-use liquids_glass::separate_liquids;
+use liquids_separation::separate_liquids;
 
 ///
 fn main() {
