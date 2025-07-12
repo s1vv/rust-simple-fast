@@ -1,11 +1,6 @@
 # type: ignore
 import numpy as np
 
-
-def main():
-    print("Hello from py!")
-
-
 symbols = np.array(["H", "W", "A", "O"])
 weights = np.array([1.36, 1.00, 0.87, 0.8], dtype=np.float64)
 
@@ -54,7 +49,3 @@ def separate_liquids_native(glass):
 
     # Нарезаем обратно на слои
     return [liquids[i : i + glass_width] for i in range(0, len(liquids), glass_width)]
-
-
-if __name__ == "__main__":
-    main()

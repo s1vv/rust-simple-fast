@@ -1,5 +1,8 @@
 # type: ignore
-from main import separate_liquids_numpy, separate_liquids_native
+from separation.liquids_separation import (
+    separate_liquids_numpy,
+    separate_liquids_native,
+)
 import numpy as np
 
 
