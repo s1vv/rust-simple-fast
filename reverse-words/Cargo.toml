@@ -1,0 +1,11 @@
+[package]
+name = "reverse-words"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+criterion = "0.6.0"
+
+[[bench]]
+name = "reverse_words_bench" # Имя файла с бенчмарками
+harness = false # Отключаем стандартный обработчик тестов/бенчмарков
