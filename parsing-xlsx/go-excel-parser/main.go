@@ -1,13 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"math"
 	"os"
 	"strconv"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -47,9 +47,8 @@ func parseExcelFile(path string, logFile *os.File) ([]map[string]any, error) {
 	supplierData := make(map[string]SupplierEntry)
 
 	for rowNum, row := range rows[1:] {
-		var name string // нужен заранее, чтобы лог был информативным
+		var name string
 
-		// Название
 		nameIdx, ok := headers["Название"]
 		if !ok || nameIdx >= len(row) {
 			fmt.Fprintf(logFile, "Строка %d: колонка 'Название' не найдена или вне диапазона\n", rowNum+2)
@@ -61,7 +60,6 @@ func parseExcelFile(path string, logFile *os.File) ([]map[string]any, error) {
 			continue
 		}
 
-		// Остаток
 		stockIdx, ok := headers["Остаток"]
 		if !ok || stockIdx >= len(row) {
 			fmt.Fprintf(logFile, "Строка %d: колонка 'Остаток' не найдена или вне диапазона для '%s'\n", rowNum+2, name)
@@ -74,7 +72,6 @@ func parseExcelFile(path string, logFile *os.File) ([]map[string]any, error) {
 			continue
 		}
 
-		// Цена
 		priceIdx, ok := headers["Цена за 1 уп."]
 		if !ok || priceIdx >= len(row) {
 			fmt.Fprintf(logFile, "Строка %d: колонка 'Цена за 1 уп.' не найдена или вне диапазона для '%s'\n", rowNum+2, name)
@@ -135,12 +132,11 @@ func main() {
 	}
 	defer jsonFile.Close()
 
-	encoder := json.NewEncoder(jsonFile)
-	encoder.SetIndent("", "  ") // для читаемого формата
-	if err := encoder.Encode(result); err != nil {
+	var json = jsoniter.ConfigFastest
+
+	if err := json.NewEncoder(jsonFile).Encode(result); err != nil {
 		log.Fatalf("не удалось сохранить JSON: %v", err)
 	}
 
-	fmt.Println("Результаты сохранены в result.json")
-
+	fmt.Println("Результаты сохранены в result-go.json")
 }
