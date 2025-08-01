@@ -24,9 +24,6 @@ venv/
 *.swp
 *.swo
 
-# macOS и др.
-.DS_Store
-
 # 👉 Игнорируем ВСЕ скрытые файлы и папки
 .*
 # кроме самого .gitignore
@@ -35,3 +32,21 @@ venv/
 # 👉 Если у тебя есть скрытые системные директории, которые ты НЕ хочешь игнорировать, добавь исключения:
 # !.github/
 # !.some-config/
+
+# dependencies (bun install)
+node_modules
+
+# output
+out
+dist
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
